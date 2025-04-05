@@ -89,6 +89,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ダークモード機能の実装
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  
+  // ローカルストレージからテーマ設定を取得
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme) {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+  } else if (prefersDarkScheme.matches) {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+
+  darkModeToggle.addEventListener("click", () => {
+    const theme = document.documentElement.getAttribute("data-theme");
+    const newTheme = theme === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  });
+
   // Initialize app
   fetchActivities();
 });
