@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Helper function to escape HTML special characters
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -20,11 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        const participantsList = details.participants
+          .map(participant => `<li>${escapeHtml(participant)}</li>`)
+          .join("");
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p><strong>スケジュール:</strong> ${details.schedule}</p>
+          <p><strong>空き状況:</strong> 残り${spotsLeft}名</p>
+          <div class="participants-section">
+            <strong>参加者リスト:</strong>
+            <ul class="participants-list">
+              ${participantsList || "<li>まだ参加者はいません</li>"}
+            </ul>
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -36,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         activitySelect.appendChild(option);
       });
     } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
+      activitiesList.innerHTML = "<p>アクティビティの読み込みに失敗しました。後でもう一度お試しください。</p>";
       console.error("Error fetching activities:", error);
     }
   }
