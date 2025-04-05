@@ -27,11 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          <div>
-            <strong>Participants:</strong>
-            <ul>${participantsList || "<li>No participants yet</li>"}</ul>
+          <p><strong>スケジュール:</strong> ${details.schedule}</p>
+          <p><strong>空き状況:</strong> 残り${spotsLeft}名</p>
+          <div class="participants-section">
+            <strong>参加者リスト:</strong>
+            <ul class="participants-list">
+              ${participantsList || "<li>まだ参加者はいません</li>"}
+            </ul>
           </div>
         `;
 
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         activitySelect.appendChild(option);
       });
     } catch (error) {
-      activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
+      activitiesList.innerHTML = "<p>アクティビティの読み込みに失敗しました。後でもう一度お試しください。</p>";
       console.error("Error fetching activities:", error);
     }
   }
